@@ -49,11 +49,14 @@ void setup() {
   // I2C สำหรับ MAX30102
   customWire.begin(I2C_SDA, I2C_SCL, 400000);
 
-  // เริ่ม MAX30102 (ไม่เช็คผลลัพธ์)
-  maxSensor.begin(customWire);
+  // เริ่ม MAX30102
+  if (!maxSensor.begin(customWire)) {
+    Serial.println("❌ MAX30102 ไม่พบ");
+    while (true);
+  }
   maxSensor.setup(60, 4, 2, 100, 411, 4096);
 
-  // เริ่ม DS18B20 (ไม่เช็คผลลัพธ์)
+  // เริ่ม DS18B20
   ds18b20.begin();
 
   // เริ่ม LoRa
@@ -66,7 +69,7 @@ void setup() {
   radio.setFrequency(FREQUENCY);
   radio.setOutputPower(TX_POWER_DBM);
 
-  Serial.println("✅ System Ready (No sensor check)");
+  Serial.println("✅ System Ready: MAX30102 + DS18B20 → LoRa");
 }
 
 void loop() {
@@ -108,7 +111,12 @@ void readHeartSensor() {
 void readTemperature() {
   ds18b20.requestTemperatures();
   float temp = ds18b20.getTempCByIndex(0);
-  bodyTemp = (temp != DEVICE_DISCONNECTED_C) ? temp : 0.0;
+  if (temp != DEVICE_DISCONNECTED_C) {
+    bodyTemp = temp;
+  } else {
+    Serial.println("❌ DS18B20 ไม่พบ");
+    bodyTemp = 0.0;
+  }
 }
 
 void sendData() {
