@@ -5,21 +5,21 @@
 #include <LiquidCrystal_I2C.h>
 
 // === LCD1602 I2C ===
-#define SDA_LCD 33
-#define SCL_LCD 34
+#define SDA_LCD 21
+#define SCL_LCD 22
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-// === SX1262 LoRa ===
-#define NSS 8
-#define DIO1 14
-#define NRST 12
-#define BUSY 13
-SX1262 radio = new Module(NSS, DIO1, NRST, BUSY);
-#define FREQUENCY_MHZ 433.175
+// === SX1278 LoRa (Ra-02) ===
+// เปลี่ยนขาเชื่อมต่อใหม่ให้เข้ากับ Ra-02
+#define NSS 5                               // CS
+#define DIO0 26                             // Interrupt
+#define NRST 14                             // Reset
+SX1278 radio = new Module(NSS, DIO0, NRST); // SX1278 ไม่ใช้ BUSY
+#define FREQUENCY_MHZ 433.175               // SX1278 ใช้ย่าน 433 MHz
 
 // === WiFi + Google Sheets ===
-const char *ssid = "@Signal-Free-WIFI";
-const char *password = "";
+const char *ssid = "T";
+const char *password = "tixe123tam";
 const char *host = "script.google.com";
 const int httpsPort = 443;
 WiFiClientSecure client;

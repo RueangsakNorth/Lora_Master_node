@@ -8,11 +8,11 @@
 
 // ============ CONFIG =============
 #define I2C_SDA         26
-#define I2C_SCL         20
+#define I2C_SCL         48
 #define FREQUENCY       433.175
 #define TX_POWER_DBM    10
 #define TX_INTERVAL_MS  5000
-#define NODE_ID         "NodeB"
+#define NODE_ID         "NodeA"
 
 // MAX30102
 TwoWire customWire = TwoWire(0);
@@ -93,7 +93,7 @@ void readHeartSensor() {
     maxSensor.nextSample();
   }
 
-  bufferLength = 100;
+  bufferLength = 50;
   for (int i = 0; i < bufferLength; i++) {
     while (!maxSensor.available()) maxSensor.check();
     redBuffer[i] = maxSensor.getRed();
